@@ -1,0 +1,58 @@
+{
+  "name": "ts-node-express-starter",
+  "version": "1.0.0",
+  "description": "Typescript Node Express Rest API server starter",
+  "private": true,
+  "authors": "filoscoder",
+  "license": "MIT",
+  "scripts": {
+    "precommit": "lint-staged",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,js}'; exit 0",
+    "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'; exit 0",
+    "transpile": "tsc",
+    "clean": "rimraf dist",
+    "build": "NODE_ENV=production run-s prettify clean transpile",
+    "watch": "tsc --watch",
+    "start": "npm run prettify & npm run transpile & nodemon",
+    "prettify": "prettier --single-quote --write \"src/**/*.{ts,js,json}\""
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "prettier --single-quote --write",
+      "tslint --fix -c tslint.json 'src/**/*.{ts,js}'; exit 0",
+      "git add"
+    ]
+  },
+  "keywords": [
+    "typescript",
+    "node",
+    "express",
+    "rest",
+    "api",
+    "server"
+  ],
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "mariadb": "^2.5.5",
+    "module-alias": "^2.2.2",
+    "sequelize": "^6.9.0",
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.4"
+  },
+  "engines": {
+    "node": ">= 12.0.0",
+    "npm": ">= 5.0.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.6",
+    "@types/sequelize": "^4.28.10",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0"
+  }
+}
