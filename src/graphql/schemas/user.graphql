@@ -1,0 +1,72 @@
+# import "./role.graphql"
+# import "./group.graphql"
+# import "./answer.graphql"
+# import "./evaluation.graphql"
+
+scalar Date
+
+type User {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  firstname: String!
+  lastname: String!
+  username: String!
+  password: String!
+  gender: String!
+
+  role: Role
+  group: Group
+
+  answers: [Answer!]
+
+  evaluations: [Evaluation!]
+}
+
+type LoginResponse {
+  id: Int!
+  username: Int!
+  token: String!
+  role: Role
+}
+
+type UserResponse {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  firstname: String!
+  lastname: String!
+  username: String!
+  password: String!
+  gender: String!
+
+  role: Role
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+input CreateUserInput {
+  firstname: String!
+  lastname: String!
+  username: String!
+  password: String!
+  gender: String
+
+  roleId: Int!
+}
+
+input UpdateUserInput {
+  id: Int!
+  firstname: String
+  lastname: String
+  username: String
+  password: String
+  gender: String
+
+  roleId: Int
+}

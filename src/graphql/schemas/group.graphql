@@ -1,0 +1,32 @@
+# import "./user.graphql"
+
+scalar Date
+
+type Group {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  name: String!
+  slug: String!
+
+  users: [User!]
+}
+
+type GroupResponse {
+  id: Int!
+  createdAt: Int!
+  updatedAt: Int!
+
+  name: String!
+  slug: String!
+}
+
+input CreateGroupInput {
+  name: String!
+}
+
+input UpdateGroupInput {
+  id: Int!
+  name: String
+}

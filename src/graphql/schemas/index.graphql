@@ -1,0 +1,54 @@
+# import "./user.graphql"
+# import "./role.graphql"
+# import "./group.graphql"
+# import "./answer.graphql"
+# import "./evaluation.graphql"
+
+enum Status {
+  WAITING
+  TODO
+  DONE
+}
+
+input EvaluationsInput {
+  groupIds: [Int!]
+  userIds: [Int!]
+  status: Status
+  usernames: [String!]
+}
+
+type Query {
+  user(id: Int!): User
+  users: [User!]!
+
+  role(id: Int!): Role
+  roles: [Role!]!
+
+  group(id: Int!): Group
+  groups: [Group!]!
+
+  answer(id: Int!): Answer
+  answers: [Answer!]!
+
+  evaluation(id: Int!): Evaluation
+  evaluations(input: EvaluationsInput): [Evaluation!]!
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse
+
+  createUser(input: CreateUserInput): UserResponse
+  updateUser(input: UpdateUserInput): UserResponse
+
+  createRole(input: CreateRoleInput): RoleResponse
+  updateRole(input: UpdateRoleInput): RoleResponse
+
+  createGroup(input: CreateGroupInput): GroupResponse
+  updateGroup(input: UpdateGroupInput): GroupResponse
+
+  updateAnswer(input: UpdateAnswerInput): AnswerResponse
+  answer(input: AnswerEvaluationInput): AnswerResponse
+
+  createEvaluation(input: CreateEvaluationInput): EvaluationResponse
+  updateEvaluation(input: UpdateEvaluationInput): EvaluationResponse
+}

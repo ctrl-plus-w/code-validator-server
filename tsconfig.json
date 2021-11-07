@@ -20,8 +20,12 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],
+      "@resolver/*": ["graphql/resolvers/*"],
+      "@typeDef/*": ["graphql/typeDefs/*"],
+      "@scalar/*": ["graphql/scalars/*"],
+      "@model/*": ["database/models/*"],
       "@database/*": ["database/*"],
-      "@model/*": ["database/models/*"]
+      "@graphql/*": ["graphql/*"]
     }
   },
   "include": ["src/**/*"],

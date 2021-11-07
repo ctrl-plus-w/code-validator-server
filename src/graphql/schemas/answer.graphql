@@ -1,0 +1,50 @@
+# import "./user.graphql"
+# import "./evaluation.graphql"
+
+scalar Date
+
+type Answer {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  content: String!
+  corrected: Boolean!
+
+  evaluation: Evaluation!
+  user: User!
+
+  elementUsage: Int
+  cleanliness: Int
+  unitTests: Int
+
+  note: String
+}
+
+type AnswerResponse {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  content: String!
+  corrected: Boolean!
+
+  evaluation: Evaluation!
+  user: User!
+
+  elementUsage: Int
+  cleanliness: Int
+  unitTests: Int
+
+  note: String
+}
+
+input UpdateAnswerInput {
+  id: Int!
+
+  elementUsage: Int!
+  cleanliness: Int!
+  unitTests: Int!
+
+  note: String!
+}

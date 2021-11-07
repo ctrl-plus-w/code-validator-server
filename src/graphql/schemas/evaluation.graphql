@@ -1,0 +1,63 @@
+# import "./user.graphql"
+# import "./group.graphql"
+# import "./answer.graphql"
+
+scalar Date
+
+type Evaluation {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  title: String!
+  slug: String!
+  subject: String!
+
+  deadline: Date!
+
+  owner: User!
+  group: Group!
+
+  answers: [Answer!]!
+}
+
+type EvaluationResponse {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  title: String!
+  slug: String!
+  subject: String!
+
+  deadline: Date!
+
+  owner: User!
+  group: Group!
+}
+
+input CreateEvaluationInput {
+  title: String!
+  subject: String!
+
+  deadline: Date!
+
+  groupId: Int!
+}
+
+input UpdateEvaluationInput {
+  id: Int!
+
+  title: String
+  subject: String
+
+  deadline: Date
+
+  groupId: Int
+}
+
+input AnswerEvaluationInput {
+  id: Int!
+
+  content: String!
+}

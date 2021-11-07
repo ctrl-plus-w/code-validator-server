@@ -1,0 +1,32 @@
+# import "./user.graphql"
+
+scalar Date
+
+type Role {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  name: String!
+  slug: String!
+
+  users: [User!]
+}
+
+type RoleResponse {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+
+  name: String!
+  slug: String!
+}
+
+input CreateRoleInput {
+  name: String!
+}
+
+input UpdateRoleInput {
+  id: Int!
+  name: String
+}
