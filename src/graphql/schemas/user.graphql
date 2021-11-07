@@ -10,8 +10,8 @@ type User {
   createdAt: Date!
   updatedAt: Date!
 
-  firstname: String!
-  lastname: String!
+  firstName: String!
+  lastName: String!
   username: String!
   password: String!
   gender: String!
@@ -36,8 +36,8 @@ type UserResponse {
   createdAt: Date!
   updatedAt: Date!
 
-  firstname: String!
-  lastname: String!
+  firstName: String!
+  lastName: String!
   username: String!
   password: String!
   gender: String!
@@ -51,8 +51,8 @@ input LoginInput {
 }
 
 input CreateUserInput {
-  firstname: String!
-  lastname: String!
+  firstName: String!
+  lastName: String!
   username: String!
   password: String!
   gender: String
@@ -62,8 +62,8 @@ input CreateUserInput {
 
 input UpdateUserInput {
   id: Int!
-  firstname: String
-  lastname: String
+  firstName: String
+  lastName: String
   username: String
   password: String
   gender: String
