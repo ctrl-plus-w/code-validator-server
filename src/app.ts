@@ -1,10 +1,12 @@
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
-import { ApolloServer } from 'apollo-server-express';
+import { addResolversToSchema } from '@graphql-tools/schema';
 import { loadSchemaSync } from '@graphql-tools/load';
+import { ApolloServer } from 'apollo-server-express';
 import { join } from 'path';
 
 import express from 'express';
 
+import resolvers from '@resolver/index';
 import dateScalar from '@scalar/date';
 
 export const createApp = async (): Promise<express.Application> => {
@@ -16,16 +18,23 @@ export const createApp = async (): Promise<express.Application> => {
     loaders: [new GraphQLFileLoader()]
   });
 
-  const resolvers = {
-    Date: dateScalar
+  const resolversWithScalars = {
+    Date: dateScalar,
+    ...resolvers
   };
 
-  const server = new ApolloServer({
-    resolvers,
+  const schemaWithResolvers = addResolversToSchema({
+    resolvers: resolversWithScalars,
     schema
   });
 
+  const server = new ApolloServer({
+    schema: schemaWithResolvers
+  });
+
   await server.start();
+
+  server.applyMiddleware({ app });
 
   return app;
 };

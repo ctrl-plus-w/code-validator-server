@@ -25,7 +25,8 @@
       "@scalar/*": ["graphql/scalars/*"],
       "@model/*": ["database/models/*"],
       "@database/*": ["database/*"],
-      "@graphql/*": ["graphql/*"]
+      "@graphql/*": ["graphql/*"],
+      "@util/*": ["utils/*"]
     }
   },
   "include": ["src/**/*"],
