@@ -32,6 +32,7 @@ export interface RoleAttributes {
   id: number;
   slug: string;
   name: string;
+  permission: number;
 }
 
 export type RoleCreationAttributes = Optional<RoleAttributes, 'id'>;
@@ -45,6 +46,8 @@ class Role
   public slug!: string;
 
   public name!: string;
+
+  public permission!: number;
 
   public users!: User[];
 
@@ -83,6 +86,10 @@ export const initRole = (sequelize: Sequelize): void => {
       },
       slug: {
         type: DataTypes.STRING,
+        allowNull: false
+      },
+      permission: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       }
     },

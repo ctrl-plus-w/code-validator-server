@@ -9,6 +9,7 @@ type Role {
 
   name: String!
   slug: String!
+  permission: Int!
 
   users: [User!]
 }
@@ -20,13 +21,16 @@ type RoleResponse {
 
   name: String!
   slug: String!
+  permission: Int!
 }
 
 input CreateRoleInput {
   name: String!
+  permission: Int!
 }
 
 input UpdateRoleInput {
   id: Int!
   name: String
+  permission: Int
 }
