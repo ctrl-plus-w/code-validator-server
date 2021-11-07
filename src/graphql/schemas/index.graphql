@@ -17,6 +17,14 @@ input EvaluationsInput {
   usernames: [String!]
 }
 
+input DeleteInput {
+  id: Int!
+}
+
+type DeleteResponse {
+  deleted: Boolean!
+}
+
 type Query {
   user(id: Int!): User
   users: [User!]!
@@ -39,16 +47,21 @@ type Mutation {
 
   createUser(input: CreateUserInput): UserResponse
   updateUser(input: UpdateUserInput): UserResponse
+  deleteUser(input: DeleteInput): DeleteResponse
 
   createRole(input: CreateRoleInput): RoleResponse
   updateRole(input: UpdateRoleInput): RoleResponse
+  deleteRole(input: DeleteInput): DeleteResponse
 
   createGroup(input: CreateGroupInput): GroupResponse
   updateGroup(input: UpdateGroupInput): GroupResponse
+  deleteGroup(input: DeleteInput): DeleteResponse
 
-  updateAnswer(input: UpdateAnswerInput): AnswerResponse
   answer(input: AnswerEvaluationInput): AnswerResponse
+  updateAnswer(input: UpdateAnswerInput): AnswerResponse
+  deleteAnswer(input: DeleteInput): DeleteResponse
 
   createEvaluation(input: CreateEvaluationInput): EvaluationResponse
   updateEvaluation(input: UpdateEvaluationInput): EvaluationResponse
+  deleteEvaluation(input: DeleteInput): DeleteResponse
 }
