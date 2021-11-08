@@ -23,9 +23,11 @@
       "@resolver/*": ["graphql/resolvers/*"],
       "@typeDef/*": ["graphql/typeDefs/*"],
       "@scalar/*": ["graphql/scalars/*"],
+      "@middleware/*": ["middlewares/*"],
       "@model/*": ["database/models/*"],
       "@database/*": ["database/*"],
       "@graphql/*": ["graphql/*"],
+      "@type/*": ["types/*"],
       "@util/*": ["utils/*"]
     }
   },
