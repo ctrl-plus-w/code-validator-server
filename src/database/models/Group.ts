@@ -36,7 +36,7 @@ export interface GroupAttributes {
 
 export type GroupCreationAttributes = Optional<GroupAttributes, 'id' | 'slug'>;
 
-class Group
+export class Group
   extends Model<GroupAttributes, GroupCreationAttributes>
   implements GroupAttributes
 {

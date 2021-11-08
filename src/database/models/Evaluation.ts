@@ -50,7 +50,7 @@ export interface EvaluationAttributes {
 
 export type EvaluationCreationAttributes = Optional<EvaluationAttributes, 'id'>;
 
-class Evaluation
+export class Evaluation
   extends Model<EvaluationAttributes, EvaluationCreationAttributes>
   implements EvaluationAttributes
 {

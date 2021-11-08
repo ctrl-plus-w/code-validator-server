@@ -56,7 +56,7 @@ export interface UserAttributes {
 
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
 
-class User
+export class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {

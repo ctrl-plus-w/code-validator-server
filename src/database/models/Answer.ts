@@ -41,7 +41,7 @@ interface AnswerAttributes {
 
 type AnswerCreationAttributes = Optional<AnswerAttributes, 'id'>;
 
-class Answer
+export class Answer
   extends Model<AnswerAttributes, AnswerCreationAttributes>
   implements AnswerAttributes
 {

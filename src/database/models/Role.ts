@@ -37,7 +37,7 @@ export interface RoleAttributes {
 
 export type RoleCreationAttributes = Optional<RoleAttributes, 'id'>;
 
-class Role
+export class Role
   extends Model<RoleAttributes, RoleCreationAttributes>
   implements RoleAttributes
 {
