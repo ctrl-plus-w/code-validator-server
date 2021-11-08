@@ -46,6 +46,10 @@ export class Group
 
   public name!: string;
 
+  public createdAt!: Date;
+
+  public updatedAt!: Date;
+
   public users!: User[];
 
   public getUsers!: HasManyGetAssociationsMixin<User>;

@@ -49,6 +49,10 @@ export class Role
 
   public permission!: number;
 
+  public createdAt!: Date;
+
+  public updatedAt!: Date;
+
   public users!: User[];
 
   public getUsers!: HasManyGetAssociationsMixin<User>;

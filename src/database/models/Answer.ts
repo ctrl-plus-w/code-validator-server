@@ -57,6 +57,10 @@ export class Answer
 
   public note!: string;
 
+  public createdAt!: Date;
+
+  public updatedAt!: Date;
+
   public user!: User;
 
   public getUser!: BelongsToGetAssociationMixin<User>;

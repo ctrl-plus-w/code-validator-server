@@ -72,6 +72,10 @@ export class User
 
   public gender!: string | null;
 
+  public createdAt!: Date;
+
+  public updatedAt!: Date;
+
   public role?: Role;
 
   public getRole!: BelongsToGetAssociationMixin<Role>;
