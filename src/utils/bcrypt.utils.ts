@@ -8,7 +8,6 @@ import CONFIG from '@/config';
  * @returns An encrypted value
  */
 export const hash = (password: string): string => {
-  console.log(CONFIG.AUTH.SALT_ROUNDS);
   return hashSync(password, parseInt(CONFIG.AUTH.SALT_ROUNDS));
 };
 
