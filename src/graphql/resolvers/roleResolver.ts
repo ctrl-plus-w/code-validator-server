@@ -2,7 +2,11 @@ import { UserInputError } from 'apollo-server-express';
 
 import Role from '@model/Role';
 
-import { slugify } from '@/utils/string.utils';
+import { checkIsAdmin } from '@middleware/authentication.middleware';
+
+import { slugify } from '@util/string.utils';
+
+import { Context } from '@type/graphql';
 
 interface GetRoleArgs {
   id: number;
@@ -29,19 +33,33 @@ interface DeleteRoleArgs {
   };
 }
 
-export const role = async (_parent: undefined, args: GetRoleArgs) => {
+export const role = async (
+  _parent: undefined,
+  args: GetRoleArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id } = args;
 
   const role = await Role.findByPk(id);
   return role;
 };
 
-export const roles = async () => {
+export const roles = async (context: Context) => {
+  await checkIsAdmin(context);
+
   const roles = await Role.findAll();
   return roles;
 };
 
-export const createRole = async (_parent: undefined, args: CreateRoleArgs) => {
+export const createRole = async (
+  _parent: undefined,
+  args: CreateRoleArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { name, permission } = args.input;
 
   const role = await Role.findOne({ where: { name } });
@@ -60,7 +78,13 @@ export const createRole = async (_parent: undefined, args: CreateRoleArgs) => {
   };
 };
 
-export const updateRole = async (_parent: undefined, args: UpdateRoleArgs) => {
+export const updateRole = async (
+  _parent: undefined,
+  args: UpdateRoleArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id, name, permission } = args.input;
 
   const role = await Role.findByPk(id);
@@ -77,7 +101,13 @@ export const updateRole = async (_parent: undefined, args: UpdateRoleArgs) => {
   return updatedRole;
 };
 
-export const deleteRole = async (_parent: undefined, args: DeleteRoleArgs) => {
+export const deleteRole = async (
+  _parent: undefined,
+  args: DeleteRoleArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id } = args.input;
 
   const role = await Role.findByPk(id);

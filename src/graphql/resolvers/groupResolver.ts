@@ -2,7 +2,11 @@ import { UserInputError } from 'apollo-server-express';
 
 import Group from '@model/Group';
 
-import { slugify } from '@/utils/string.utils';
+import { checkIsAdmin } from '@middleware/authentication.middleware';
+
+import { slugify } from '@util/string.utils';
+
+import { Context } from '@type/graphql';
 
 interface GetGroupArgs {
   id: number;
@@ -27,22 +31,37 @@ interface DeleteGroupArgs {
   };
 }
 
-export const group = async (_parent: undefined, args: GetGroupArgs) => {
+export const group = async (
+  _parent: undefined,
+  args: GetGroupArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id } = args;
 
   const group = await Group.findByPk(id);
   return group;
 };
 
-export const groups = async (_parent: undefined) => {
+export const groups = async (
+  _parent: undefined,
+  _args: undefined,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const groups = await Group.findAll();
   return groups;
 };
 
 export const createGroup = async (
   _parent: undefined,
-  args: CreateGroupArgs
+  args: CreateGroupArgs,
+  context: Context
 ) => {
+  await checkIsAdmin(context);
+
   const { name } = args.input;
 
   const group = await Group.findOne({ where: { name } });
@@ -57,8 +76,11 @@ export const createGroup = async (
 
 export const updateGroup = async (
   _parent: undefined,
-  args: UpdateGroupArgs
+  args: UpdateGroupArgs,
+  context: Context
 ) => {
+  await checkIsAdmin(context);
+
   const { id, name } = args.input;
 
   const group = await Group.findByPk(id);
@@ -76,8 +98,11 @@ export const updateGroup = async (
 
 export const deleteGroup = async (
   _parent: undefined,
-  args: DeleteGroupArgs
+  args: DeleteGroupArgs,
+  context: Context
 ) => {
+  await checkIsAdmin(context);
+
   const { id } = args.input;
 
   const group = await Group.findByPk(id);

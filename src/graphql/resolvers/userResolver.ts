@@ -1,11 +1,17 @@
 import { UserInputError } from 'apollo-server-express';
+import { sign } from 'jsonwebtoken';
 
 import Group from '@model/Group';
 import Role from '@model/Role';
 import User from '@model/User';
 
-import { hash } from '@util/bcrypt.utils';
-import { valOrUndefined } from '@/utils/format.utils';
+import { hash, verify } from '@util/bcrypt.utils';
+
+import { checkIsAdmin } from '@middleware/authentication.middleware';
+
+import { Context } from '@type/graphql';
+
+import CONFIG from '@/config';
 
 interface GetUserArgs {
   id: number;
@@ -14,6 +20,13 @@ interface GetUserArgs {
 interface DeleteUserArgs {
   input: {
     id: number;
+  };
+}
+
+interface LoginArgs {
+  input: {
+    username: string;
+    password: string;
   };
 }
 
@@ -43,19 +56,64 @@ interface UpdateUserArgs {
   };
 }
 
-export const user = async (_parent: undefined, args: GetUserArgs) => {
+export const user = async (
+  _parent: undefined,
+  args: GetUserArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id } = args;
 
   const user = await User.findByPk(id);
   return user;
 };
 
-export const users = async () => {
+export const users = async (
+  _parent: undefined,
+  _args: undefined,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const users = await User.findAll();
   return users;
 };
 
-export const createUser = async (_parent: undefined, args: CreateUserArgs) => {
+export const login = async (_parent: undefined, args: LoginArgs) => {
+  const AUTH_ERROR = new UserInputError('Wrong username or password');
+
+  const { password, username } = args.input;
+
+  const user = await User.findOne({ where: { username }, include: [Role] });
+  if (!user) throw AUTH_ERROR;
+
+  const isPasswordValid = verify(password, user.password);
+  if (!isPasswordValid) throw AUTH_ERROR;
+
+  const payload = {
+    id: user.id,
+    username: user.username,
+    role: user.role
+  };
+
+  const token = sign(payload, CONFIG.AUTH.TOKEN_SALT, {
+    expiresIn: `${CONFIG.AUTH.TOKEN_DURATION}h`
+  });
+
+  return {
+    ...payload,
+    token
+  };
+};
+
+export const createUser = async (
+  _parent: undefined,
+  args: CreateUserArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { firstName, gender, lastName, password, username, roleId } =
     args.input;
 
@@ -84,7 +142,13 @@ export const createUser = async (_parent: undefined, args: CreateUserArgs) => {
   };
 };
 
-export const updateUser = async (_parent: undefined, args: UpdateUserArgs) => {
+export const updateUser = async (
+  _parent: undefined,
+  args: UpdateUserArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const {
     id,
     firstName,
@@ -134,7 +198,13 @@ export const updateUser = async (_parent: undefined, args: UpdateUserArgs) => {
   };
 };
 
-export const deleteUser = async (_parent: undefined, args: DeleteUserArgs) => {
+export const deleteUser = async (
+  _parent: undefined,
+  args: DeleteUserArgs,
+  context: Context
+) => {
+  await checkIsAdmin(context);
+
   const { id } = args.input;
 
   const user = await User.findByPk(id);

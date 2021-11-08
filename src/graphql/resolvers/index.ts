@@ -3,7 +3,8 @@ import {
   users,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  login
 } from '@resolver/userResolver';
 
 import {
@@ -40,7 +41,7 @@ const resolvers = {
     // evaluations
   },
   Mutation: {
-    // login,
+    login,
     createUser,
     updateUser,
     deleteUser,

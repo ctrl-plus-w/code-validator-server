@@ -22,10 +22,8 @@ const CONFIG = {
   },
   AUTH: {
     SALT_ROUNDS: process.env.SALT_ROUNDS || '11',
-    ACCESS_TOKEN_EXPIRE: process.env.ACCESS_TOKEN_DURATION || '300000',
-    REFRESH_TOKEN_EXPIRE: process.env.REFRESH_TOKEN_DURATION || '86400000',
-    ACCESS_TOKEN_SALT: process.env.ACCESS_TOKEN_SALT,
-    REFRESH_TOKEN_SALT: process.env.REFRESH_TOKEN_SALT
+    TOKEN_DURATION: process.env.TOKEN_DURATION || '1h',
+    TOKEN_SALT: process.env.TOKEN_SALT || 'abcdefghijklm12345'
   }
 };
 
