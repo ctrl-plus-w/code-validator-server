@@ -67,6 +67,28 @@ export class Group
   public removeUsers!: HasManyRemoveAssociationsMixin<User, number>;
 
   public createUser!: HasManyCreateAssociationMixin<User>;
+
+  public groups!: Group[];
+
+  public getGroups!: HasManyGetAssociationsMixin<Group>;
+
+  public countGroups!: HasManyCountAssociationsMixin;
+
+  public hasGroup!: HasManyHasAssociationMixin<Group, number>;
+
+  public hasGroups!: HasManyHasAssociationsMixin<Group, number>;
+
+  public setGroups!: HasManySetAssociationsMixin<Group, number>;
+
+  public addGroup!: HasManyAddAssociationMixin<Group, number>;
+
+  public addGroups!: HasManyAddAssociationsMixin<Group, number>;
+
+  public removeGroup!: HasManyRemoveAssociationMixin<Group, number>;
+
+  public removeGroups!: HasManyRemoveAssociationsMixin<Group, number>;
+
+  public createGroup!: HasManyCreateAssociationMixin<Group>;
 }
 
 export const initGroup = (sequelize: Sequelize): void => {

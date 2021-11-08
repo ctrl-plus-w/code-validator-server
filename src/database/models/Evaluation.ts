@@ -36,6 +36,7 @@ import {
 
 import type Answer from '@model/Answer';
 import type User from '@model/User';
+import Group from './Group';
 
 export interface EvaluationAttributes {
   id: number;
@@ -71,6 +72,14 @@ export class Evaluation
   public setUser!: BelongsToSetAssociationMixin<User, number>;
 
   public createUser!: BelongsToCreateAssociationMixin<User>;
+
+  public group!: Group;
+
+  public getGroup!: BelongsToGetAssociationMixin<Group>;
+
+  public setGroup!: BelongsToSetAssociationMixin<Group, number>;
+
+  public createGroup!: BelongsToCreateAssociationMixin<Group>;
 
   public answers!: Answer[];
 

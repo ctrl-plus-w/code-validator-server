@@ -35,11 +35,13 @@ User.hasMany(Evaluation);
 Role.hasMany(User);
 
 Group.hasMany(User);
+Group.hasMany(Evaluation);
 
 Answer.belongsTo(User);
 Answer.belongsTo(Evaluation);
 
 Evaluation.hasMany(Answer);
 Evaluation.belongsTo(User);
+Evaluation.belongsTo(Group);
 
 export default sequelize;
