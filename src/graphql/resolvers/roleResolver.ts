@@ -46,7 +46,11 @@ export const role = async (
   return role;
 };
 
-export const roles = async (context: Context) => {
+export const roles = async (
+  _parent: undefined,
+  _args: undefined,
+  context: Context
+) => {
   await checkIsAdmin(context);
 
   const roles = await Role.findAll();
