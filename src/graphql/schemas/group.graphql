@@ -15,8 +15,8 @@ type Group {
 
 type GroupResponse {
   id: Int!
-  createdAt: Int!
-  updatedAt: Int!
+  createdAt: Date!
+  updatedAt: Date!
 
   name: String!
   slug: String!
