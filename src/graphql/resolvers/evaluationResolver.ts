@@ -82,7 +82,7 @@ export const evaluation = async (
 
 export const evaluations = async (
   _parent: undefined,
-  args: undefined,
+  _args: undefined,
   context: Context
 ) => {
   await checkIsAdminOrProfessor(context);
