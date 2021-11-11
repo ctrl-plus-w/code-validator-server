@@ -125,7 +125,7 @@ export const initEvaluation = (sequelize: Sequelize): void => {
         allowNull: false
       },
       subject: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
       },
       deadline: {
