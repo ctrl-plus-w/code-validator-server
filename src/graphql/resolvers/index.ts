@@ -23,6 +23,15 @@ import {
   deleteGroup
 } from '@resolver/groupResolver';
 
+import {
+  evaluation,
+  evaluations,
+  createEvaluation,
+  updateEvaluation,
+  deleteEvaluation
+} from '@resolver/evaluationResolver';
+
+import Evaluation from '@model/Evaluation';
 import Group from '@model/Group';
 import User from '@model/User';
 import Role from '@model/Role';
@@ -34,11 +43,11 @@ const resolvers = {
     role,
     roles,
     group,
-    groups
+    groups,
     // answer,
     // answers,
-    // evaluation,
-    // evaluations
+    evaluation,
+    evaluations
   },
   Mutation: {
     login,
@@ -50,13 +59,13 @@ const resolvers = {
     deleteRole,
     createGroup,
     updateGroup,
-    deleteGroup
+    deleteGroup,
     // answer,
     // updateAnswer,
     // deleteAnswer,
-    // createEvaluation,
-    // updateEvaluation,
-    // deleteEvaluation,
+    createEvaluation,
+    updateEvaluation,
+    deleteEvaluation
   },
   User: {
     role: async (parent: User) => {
@@ -79,6 +88,12 @@ const resolvers = {
     users: async (parent: Group) => {
       const users = await parent.getUsers();
       return users;
+    }
+  },
+  Evaluation: {
+    answers: async (parent: Evaluation) => {
+      const answers = await parent.getAnswers({ include: [{ model: User }] });
+      return answers;
     }
   }
 };
