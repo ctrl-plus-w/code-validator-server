@@ -32,14 +32,18 @@ import type User from '@model/User';
 
 interface AnswerAttributes {
   id: number;
+  content: string;
   corrected: boolean;
-  elementUsage: number;
-  cleanliness: number;
-  unitTests: number;
-  note: string;
+  elementUsage?: number;
+  cleanliness?: number;
+  unitTests?: number;
+  note?: string;
 }
 
-type AnswerCreationAttributes = Optional<AnswerAttributes, 'id'>;
+type AnswerCreationAttributes = Optional<
+  AnswerAttributes,
+  'id' | 'corrected' | 'elementUsage' | 'cleanliness' | 'unitTests' | 'note'
+>;
 
 export class Answer
   extends Model<AnswerAttributes, AnswerCreationAttributes>
@@ -47,15 +51,17 @@ export class Answer
 {
   public id!: number;
 
+  public content!: string;
+
   public corrected!: boolean;
 
-  public elementUsage!: number;
+  public elementUsage?: number;
 
-  public cleanliness!: number;
+  public cleanliness?: number;
 
-  public unitTests!: number;
+  public unitTests?: number;
 
-  public note!: string;
+  public note?: string;
 
   public createdAt!: Date;
 
@@ -85,6 +91,10 @@ export const initAnswer = (sequelize: Sequelize): void => {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: false
       },
       corrected: {
         type: DataTypes.BOOLEAN,
