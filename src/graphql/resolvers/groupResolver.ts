@@ -71,7 +71,7 @@ export const createGroup = async (
 
   const createdGroup = await Group.create({ name, slug });
 
-  return createdGroup;
+  return createdGroup.toJSON();
 };
 
 export const updateGroup = async (
