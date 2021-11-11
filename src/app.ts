@@ -1,14 +1,11 @@
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
-import {
-  addResolversToSchema,
-  makeExecutableSchema
-} from '@graphql-tools/schema';
+import { addResolversToSchema } from '@graphql-tools/schema';
+import { TokenExpiredError, verify } from 'jsonwebtoken';
 import { loadSchemaSync } from '@graphql-tools/load';
-import { ApolloServer, AuthenticationError } from 'apollo-server-express';
-import { decode, verify } from 'jsonwebtoken';
+import { ApolloServer } from 'apollo-server-express';
 import { join } from 'path';
 
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 
 import express from 'express';
 
@@ -51,9 +48,19 @@ export const createApp = async (): Promise<express.Application> => {
       const user = await User.findByPk(decodedToken.id);
       if (!user) throw new Error();
 
-      return { jwt: decodedToken, loggedIn: true, user: user };
+      return {
+        jwt: decodedToken,
+        loggedIn: true,
+        user: user,
+        expired: false
+      };
     } catch (err: unknown) {
-      return { loggedIn: false, jwt: null, user: null };
+      return {
+        loggedIn: false,
+        jwt: null,
+        user: null,
+        expired: err instanceof TokenExpiredError
+      };
     }
   };
 

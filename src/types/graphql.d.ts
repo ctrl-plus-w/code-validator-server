@@ -11,9 +11,11 @@ export type Context =
       loggedIn: true;
       jwt: TokenPayload;
       user: import('../database/models/User').User;
+      expired: false;
     }
   | {
       loggedIn: false;
       jwt: null;
       user: null;
+      expired: boolean;
     };

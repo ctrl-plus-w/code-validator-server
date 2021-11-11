@@ -7,6 +7,8 @@ import { Context } from '@type/graphql';
  * @param context The request context
  */
 export const isLoggedIn = async (context: Context): Promise<void> => {
+  if (context.expired) throw new AuthenticationError('The token has expired');
+
   if (!context.loggedIn || !context.jwt.role)
     throw new AuthenticationError('You must be logged in');
 };
@@ -18,7 +20,7 @@ export const isLoggedIn = async (context: Context): Promise<void> => {
 export const checkIsAdmin = async (context: Context): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission !== 0)
+  if (!context.jwt || context.jwt.role.permission !== 0)
     throw new ForbiddenError("You don't have the required role");
 };
 
@@ -29,7 +31,7 @@ export const checkIsAdmin = async (context: Context): Promise<void> => {
 export const checkIsProfessor = async (context: Context): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission !== 1)
+  if (!context.jwt || context.jwt.role.permission !== 1)
     throw new ForbiddenError("You don't have the required role");
 };
 
@@ -40,7 +42,7 @@ export const checkIsProfessor = async (context: Context): Promise<void> => {
 export const checkIsStudent = async (context: Context): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission !== 2)
+  if (!context.jwt || context.jwt.role.permission !== 2)
     throw new ForbiddenError("You don't have the required role");
 };
 
@@ -53,7 +55,7 @@ export const checkIsAdminOrProfessor = async (
 ): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission in [0, 1])
+  if (context.jwt && !(context.jwt.role.permission in [0, 1]))
     throw new ForbiddenError("You don't have the required role");
 };
 
@@ -66,7 +68,7 @@ export const checkIsStudentOrProfessor = async (
 ): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission in [1, 2])
+  if (!context.jwt || !(context.jwt.role.permission in [1, 2]))
     throw new ForbiddenError("You don't have the required role");
 };
 
@@ -79,6 +81,6 @@ export const checkIsAdminOrStudent = async (
 ): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission in [0, 2])
+  if (!context.jwt || !(context.jwt.role.permission in [0, 2]))
     throw new ForbiddenError("You don't have the required role");
 };
