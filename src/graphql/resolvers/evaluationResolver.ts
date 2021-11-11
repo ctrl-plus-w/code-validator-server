@@ -133,8 +133,8 @@ export const createEvaluation = async (
 
   return {
     ...createdEvaluation.toJSON(),
-    owner: user,
-    group: group
+    group: group,
+    user
   };
 };
 

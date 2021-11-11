@@ -8,7 +8,7 @@
  * title: string
  * subject: string
  * deadline: Date
- * owner: User
+ * user: User
  * answers: Answer[]
  * group: Group
  *

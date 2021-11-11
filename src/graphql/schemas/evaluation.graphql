@@ -15,7 +15,7 @@ type Evaluation {
 
   deadline: Date!
 
-  owner: User!
+  user: User!
   group: Group!
 
   answers: [Answer!]!
@@ -32,7 +32,7 @@ type EvaluationResponse {
 
   deadline: Date!
 
-  owner: User!
+  userf: User!
   group: Group!
 }
 
