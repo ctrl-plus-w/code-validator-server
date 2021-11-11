@@ -7,7 +7,8 @@ import User from '@model/User';
 
 import {
   checkIsAdminOrProfessor,
-  checkIsProfessor
+  checkIsProfessor,
+  checkIsStudent
 } from '@middleware/authentication.middleware';
 
 import { Context } from '@type/graphql';
@@ -38,6 +39,14 @@ interface UpdateEvaluationArgs {
     deadline?: Date;
 
     groupId?: number;
+  };
+}
+
+interface AnswerEvaluationArgs {
+  input: {
+    id: number;
+
+    content: string;
   };
 }
 
@@ -175,6 +184,42 @@ export const updateEvaluation = async (
     ...updatedEvaluation.toJSON(),
     group,
     owner
+  };
+};
+
+export const answer = async (
+  _parent: undefined,
+  args: AnswerEvaluationArgs,
+  context: Context
+) => {
+  await checkIsStudent(context);
+
+  const { user } = context;
+  if (!user) throw new AuthenticationError('You must be logged in');
+
+  const { id, content } = args.input;
+
+  const evaluation = await Evaluation.findByPk(id);
+  if (!evaluation) throw new UserInputError('Evaluation not found');
+
+  const answerCount = await Answer.count({
+    include: [
+      { model: User, where: { id: user.id } },
+      { model: Evaluation, where: { id: evaluation.id } }
+    ]
+  });
+
+  if (answerCount > 0)
+    throw new UserInputError('You already answered this evaluation');
+
+  const createdAnswer = await evaluation.createAnswer({
+    content
+  });
+
+  return {
+    ...createdAnswer.toJSON(),
+    evaluation,
+    user
   };
 };
 

@@ -36,7 +36,7 @@ type Query {
   groups: [Group!]!
 
   answer(id: Int!): Answer
-  answers: [Answer!]!
+  answers(evaluationId: Int): [Answer!]!
 
   evaluation(id: Int!): Evaluation
   evaluations(input: EvaluationsInput): [Evaluation!]!

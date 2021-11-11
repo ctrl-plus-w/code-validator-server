@@ -31,10 +31,18 @@ import {
   deleteEvaluation
 } from '@resolver/evaluationResolver';
 
+import {
+  answer as getAnswer,
+  answers,
+  updateAnswer,
+  deleteAnswer
+} from '@resolver/answerResolver';
+
 import Evaluation from '@model/Evaluation';
 import Group from '@model/Group';
 import User from '@model/User';
 import Role from '@model/Role';
+import Answer from '@/database/models/Answer';
 
 const resolvers = {
   Query: {
@@ -44,8 +52,8 @@ const resolvers = {
     roles,
     group,
     groups,
-    // answer,
-    // answers,
+    answer: getAnswer,
+    answers,
     evaluation,
     evaluations
   },
@@ -61,8 +69,8 @@ const resolvers = {
     updateGroup,
     deleteGroup,
     // answer,
-    // updateAnswer,
-    // deleteAnswer,
+    updateAnswer,
+    deleteAnswer,
     createEvaluation,
     updateEvaluation,
     deleteEvaluation
@@ -94,6 +102,16 @@ const resolvers = {
     answers: async (parent: Evaluation) => {
       const answers = await parent.getAnswers({ include: [{ model: User }] });
       return answers;
+    }
+  },
+  Answer: {
+    user: async (parent: Answer) => {
+      const user = await parent.getUser();
+      return user;
+    },
+    evaluation: async (parent: Answer) => {
+      const evaluation = await parent.getEvaluation();
+      return evaluation;
     }
   }
 };
