@@ -106,8 +106,9 @@ export const createEvaluation = async (
 
   const slug = slugify(title);
 
-  const evaluation = await Evaluation.findOne({ where: { slug } });
-  if (evaluation) throw new UserInputError('Evaluation already exists');
+  const evaluationCount = await user.countEvaluations({ where: { slug } });
+  if (evaluationCount > 0)
+    throw new UserInputError('Evaluation already exists');
 
   const group = await Group.findByPk(groupId);
   if (!group) throw new UserInputError('Group not found');
