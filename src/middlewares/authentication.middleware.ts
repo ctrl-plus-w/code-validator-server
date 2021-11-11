@@ -7,7 +7,8 @@ import { Context } from '@type/graphql';
  * @param context The request context
  */
 export const isLoggedIn = async (context: Context): Promise<void> => {
-  if (!context.loggedIn) throw new AuthenticationError('You must be logged in');
+  if (!context.loggedIn || !context.jwt.role)
+    throw new AuthenticationError('You must be logged in');
 };
 
 /**
@@ -33,6 +34,17 @@ export const checkIsProfessor = async (context: Context): Promise<void> => {
 };
 
 /**
+ * Throw an error if the user isn't an professor
+ * @param context The request context
+ */
+export const checkIsStudent = async (context: Context): Promise<void> => {
+  await isLoggedIn(context);
+
+  if (context.jwt && context.jwt.role.permission !== 2)
+    throw new ForbiddenError("You don't have the required role");
+};
+
+/**
  * Throw an error if the user isn't an professor or an admin
  * @param context The request context
  */
@@ -41,6 +53,32 @@ export const checkIsAdminOrProfessor = async (
 ): Promise<void> => {
   await isLoggedIn(context);
 
-  if (context.jwt && context.jwt.role.permission > 1)
+  if (context.jwt && context.jwt.role.permission in [0, 1])
+    throw new ForbiddenError("You don't have the required role");
+};
+
+/**
+ * Throw an error if the user isn't an professor or an student
+ * @param context The request context
+ */
+export const checkIsStudentOrProfessor = async (
+  context: Context
+): Promise<void> => {
+  await isLoggedIn(context);
+
+  if (context.jwt && context.jwt.role.permission in [1, 2])
+    throw new ForbiddenError("You don't have the required role");
+};
+
+/**
+ * Throw an error if the user isn't a student or an admin
+ * @param context The request context
+ */
+export const checkIsAdminOrStudent = async (
+  context: Context
+): Promise<void> => {
+  await isLoggedIn(context);
+
+  if (context.jwt && context.jwt.role.permission in [0, 2])
     throw new ForbiddenError("You don't have the required role");
 };
