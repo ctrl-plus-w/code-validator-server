@@ -51,9 +51,9 @@ export const createApp = async (): Promise<express.Application> => {
       const user = await User.findByPk(decodedToken.id);
       if (!user) throw new Error();
 
-      return { jwt: decodedToken, loggedIn: true };
+      return { jwt: decodedToken, loggedIn: true, user: user };
     } catch (err: unknown) {
-      return { loggedIn: false, jwt: null };
+      return { loggedIn: false, jwt: null, user: null };
     }
   };
 

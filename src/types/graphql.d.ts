@@ -10,8 +10,10 @@ export type Context =
   | {
       loggedIn: true;
       jwt: TokenPayload;
+      user: import('../database/models/User').User;
     }
   | {
       loggedIn: false;
       jwt: null;
+      user: null;
     };
