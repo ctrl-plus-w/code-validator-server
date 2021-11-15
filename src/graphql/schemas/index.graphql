@@ -44,6 +44,7 @@ type Query {
 
 type Mutation {
   login(input: LoginInput!): LoginResponse
+  validateToken(input: ValidateTokenInput!): ValidateTokenResponse
 
   createUser(input: CreateUserInput): UserResponse
   updateUser(input: UpdateUserInput): UserResponse

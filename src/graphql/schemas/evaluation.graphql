@@ -19,6 +19,11 @@ type Evaluation {
   group: Group!
 
   answers: [Answer!]!
+
+  totalUsers: Int
+  completedUsers: Int
+
+  maxNote: Int
 }
 
 type EvaluationResponse {

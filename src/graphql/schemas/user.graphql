@@ -29,6 +29,17 @@ type LoginResponse {
   username: String!
   token: String!
   role: Role
+  firstName: String!
+  lastName: String!
+}
+
+type ValidateTokenResponse {
+  id: Int!
+  username: String!
+  token: String!
+  role: Role
+  firstName: String!
+  lastName: String!
 }
 
 type UserResponse {
@@ -48,6 +59,10 @@ type UserResponse {
 input LoginInput {
   username: String!
   password: String!
+}
+
+input ValidateTokenInput {
+  token: String!
 }
 
 input CreateUserInput {

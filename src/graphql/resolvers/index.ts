@@ -4,7 +4,8 @@ import {
   createUser,
   updateUser,
   deleteUser,
-  login
+  login,
+  validateToken
 } from '@resolver/userResolver';
 
 import {
@@ -26,6 +27,7 @@ import {
 import {
   evaluation,
   evaluations,
+  answer,
   createEvaluation,
   updateEvaluation,
   deleteEvaluation
@@ -59,6 +61,7 @@ const resolvers = {
   },
   Mutation: {
     login,
+    validateToken,
     createUser,
     updateUser,
     deleteUser,
@@ -68,7 +71,7 @@ const resolvers = {
     createGroup,
     updateGroup,
     deleteGroup,
-    // answer,
+    answer,
     updateAnswer,
     deleteAnswer,
     createEvaluation,
@@ -102,6 +105,15 @@ const resolvers = {
     answers: async (parent: Evaluation) => {
       const answers = await parent.getAnswers({ include: [{ model: User }] });
       return answers;
+    },
+    totalUsers: async (parent: Evaluation) => {
+      const group = parent.group || (await parent.getGroup());
+      const usersCount = await group.countUsers();
+      return usersCount;
+    },
+    completedUsers: async (parent: Evaluation) => {
+      const answersCount = await parent.countAnswers();
+      return answersCount;
     }
   },
   Answer: {

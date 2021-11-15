@@ -1,11 +1,11 @@
 import { UserInputError } from 'apollo-server-express';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
 import Group from '@model/Group';
 import Role from '@model/Role';
 import User from '@model/User';
 
-import { hash, verify } from '@util/bcrypt.utils';
+import { hash, verify as compare } from '@util/bcrypt.utils';
 
 import { checkIsAdmin } from '@middleware/authentication.middleware';
 
@@ -27,6 +27,12 @@ interface LoginArgs {
   input: {
     username: string;
     password: string;
+  };
+}
+
+interface ValidateTokenArgs {
+  input: {
+    token: string;
   };
 }
 
@@ -88,13 +94,15 @@ export const login = async (_parent: undefined, args: LoginArgs) => {
   const user = await User.findOne({ where: { username }, include: [Role] });
   if (!user) throw AUTH_ERROR;
 
-  const isPasswordValid = verify(password, user.password);
+  const isPasswordValid = compare(password, user.password);
   if (!isPasswordValid) throw AUTH_ERROR;
 
   const payload = {
     id: user.id,
     username: user.username,
-    role: user.role
+    role: user.role,
+    firstName: user.firstName,
+    lastName: user.lastName
   };
 
   const token = sign(payload, CONFIG.AUTH.TOKEN_SALT, {
@@ -105,6 +113,26 @@ export const login = async (_parent: undefined, args: LoginArgs) => {
     ...payload,
     token
   };
+};
+
+export const validateToken = async (
+  _parent: undefined,
+  args: ValidateTokenArgs
+) => {
+  const { token } = args.input;
+
+  try {
+    const payload = verify(token, CONFIG.AUTH.TOKEN_SALT);
+
+    if (typeof payload === 'string') throw new Error();
+
+    return {
+      ...payload,
+      token
+    };
+  } catch (_) {
+    throw new UserInputError('Invalid token');
+  }
 };
 
 export const createUser = async (
