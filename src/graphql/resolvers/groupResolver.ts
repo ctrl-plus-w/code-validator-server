@@ -2,7 +2,10 @@ import { UserInputError } from 'apollo-server-express';
 
 import Group from '@model/Group';
 
-import { checkIsAdmin } from '@middleware/authentication.middleware';
+import {
+  checkIsAdmin,
+  checkIsProfessor
+} from '@middleware/authentication.middleware';
 
 import { slugify } from '@util/string.utils';
 
@@ -36,7 +39,7 @@ export const group = async (
   args: GetGroupArgs,
   context: Context
 ) => {
-  await checkIsAdmin(context);
+  await checkIsProfessor(context);
 
   const { id } = args;
 
@@ -49,7 +52,7 @@ export const groups = async (
   _args: undefined,
   context: Context
 ) => {
-  await checkIsAdmin(context);
+  await checkIsProfessor(context);
 
   const groups = await Group.findAll();
   return groups;
