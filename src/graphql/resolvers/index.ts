@@ -114,6 +114,10 @@ const resolvers = {
     completedUsers: async (parent: Evaluation) => {
       const answersCount = await parent.countAnswers();
       return answersCount;
+    },
+    group: async (parent: Evaluation) => {
+      const group = await parent.getGroup();
+      return group;
     }
   },
   Answer: {
