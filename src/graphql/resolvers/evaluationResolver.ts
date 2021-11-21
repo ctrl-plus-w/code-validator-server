@@ -79,8 +79,6 @@ export const evaluation = async (
       ? await user.getEvaluations(params)
       : await Evaluation.findAll(params);
 
-  console.log(evaluation);
-
   return evaluation;
 };
 

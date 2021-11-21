@@ -19,7 +19,7 @@ interface GetAnswerArgs {
 }
 
 interface GetAnswersArgs {
-  id?: number;
+  evaluationId?: number;
 }
 
 interface UpdateAnswerArgs {
@@ -92,23 +92,28 @@ export const answers = async (
 
   const params = { include: [{ model: User }, { model: Evaluation }] };
 
-  if (role in [CONFIG.ROLES.ADMIN.SLUG, CONFIG.ROLES.PROFESSOR.SLUG]) {
-    const answers =
-      role === CONFIG.ROLES.ADMIN.SLUG
-        ? await Answer.findAll(params)
-        : await user.getAnswers(params);
-
-    return answers;
-  } else {
-    const { id } = args;
-    if (!id) throw new UserInputError('You must specify the evaluation id');
-
-    const evaluation = await Evaluation.findByPk(id);
-    if (!evaluation) throw new UserInputError('Evaluation not found');
-
-    const answers = await evaluation.getAnswers(params);
+  if (role === CONFIG.ROLES.ADMIN.SLUG) {
+    const answers = await Answer.findAll(params);
     return answers;
   }
+
+  if (role === CONFIG.ROLES.PROFESSOR.SLUG) {
+    const { evaluationId } = args;
+    if (!evaluationId)
+      throw new UserInputError('You must specify the evaluation id');
+
+    const [evaluation] = await user.getEvaluations({ attributes: ['id'] });
+
+    const answers = await evaluation.getAnswers();
+    return answers;
+  }
+
+  if (role === CONFIG.ROLES.STUDENT.SLUG) {
+    const answers = await user.getAnswers();
+    return answers;
+  }
+
+  return [];
 };
 
 export const updateAnswer = async (
