@@ -12,6 +12,8 @@ import {
 
 import { Context } from '@type/graphql';
 
+import CONFIG from '@/config';
+
 interface GetAnswerArgs {
   id: number;
 }
@@ -50,12 +52,12 @@ export const answer = async (
 
   const role = context.jwt.role.slug;
 
-  if (role === 'administrateur') {
+  if (role === CONFIG.ROLES.ADMIN.SLUG) {
     const answer = await Answer.findByPk(id);
     return answer;
   }
 
-  if (role === 'enseignant') {
+  if (role === CONFIG.ROLES.PROFESSOR.SLUG) {
     const evaluationIds = await user
       .getEvaluations({ attributes: ['id'] })
       .then((evs) => evs.map((ev) => ev.id));
@@ -70,7 +72,7 @@ export const answer = async (
     return answer;
   }
 
-  if (role === 'etudiant') {
+  if (role === CONFIG.ROLES.STUDENT.SLUG) {
     const [answer] = await user.getAnswers({ limit: 1 });
     return answer;
   }
@@ -90,9 +92,9 @@ export const answers = async (
 
   const params = { include: [{ model: User }, { model: Evaluation }] };
 
-  if (role in ['administrateur', 'etudiant']) {
+  if (role in [CONFIG.ROLES.ADMIN.SLUG, CONFIG.ROLES.PROFESSOR.SLUG]) {
     const answers =
-      role === 'administrateur'
+      role === CONFIG.ROLES.ADMIN.SLUG
         ? await Answer.findAll(params)
         : await user.getAnswers(params);
 
@@ -126,7 +128,7 @@ export const updateAnswer = async (
   const params = { where: { id }, limit: 1 };
 
   const [answer] =
-    role === 'administrateur'
+    role === CONFIG.ROLES.ADMIN.SLUG
       ? await Answer.findAll(params)
       : await user.getAnswers(params);
 

@@ -14,6 +14,8 @@ import {
 import { Context } from '@type/graphql';
 import { slugify } from '@util/string.utils';
 
+import CONFIG from '@/config';
+
 interface GetEvaluationArgs {
   id: number;
 }
@@ -73,9 +75,11 @@ export const evaluation = async (
   const params = { where: { id }, limit: 1 };
 
   const [evaluation] =
-    role === 'professeur'
+    role === CONFIG.ROLES.PROFESSOR.SLUG
       ? await user.getEvaluations(params)
       : await Evaluation.findAll(params);
+
+  console.log(evaluation);
 
   return evaluation;
 };
@@ -92,7 +96,7 @@ export const evaluations = async (
 
   const role = context.jwt.role.slug;
 
-  const where = role === 'enseignant' ? { id: user.id } : {};
+  const where = role === CONFIG.ROLES.PROFESSOR.SLUG ? { id: user.id } : {};
 
   const evaluations = await Evaluation.findAll({
     include: [{ model: User, where }, { model: Answer }, { model: Group }]
@@ -157,7 +161,7 @@ export const updateEvaluation = async (
   let group: Group | null;
 
   const [evaluation] =
-    role === 'administrateur'
+    role === CONFIG.ROLES.ADMIN.SLUG
       ? await Evaluation.findAll(params)
       : await user.getEvaluations(params);
 
@@ -216,6 +220,8 @@ export const answer = async (
     content
   });
 
+  await createdAnswer.setUser(user);
+
   return {
     ...createdAnswer.toJSON(),
     evaluation,
@@ -240,7 +246,7 @@ export const deleteEvaluation = async (
   const params = { where: { id }, limit: 1 };
 
   const [evaluation] =
-    role === 'administrateur'
+    role === CONFIG.ROLES.ADMIN.SLUG
       ? await Evaluation.findAll(params)
       : await user.getEvaluations(params);
 
