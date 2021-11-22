@@ -130,12 +130,19 @@ export const updateAnswer = async (
 
   const { id, cleanliness, elementUsage, note, unitTests } = args.input;
 
-  const params = { where: { id }, limit: 1 };
+  const userEvaluationsId = (
+    await user.getEvaluations({ attributes: ['id'] })
+  ).map((ev) => ev.id);
 
-  const [answer] =
-    role === CONFIG.ROLES.ADMIN.SLUG
-      ? await Answer.findAll(params)
-      : await user.getAnswers(params);
+  const professorParams = {
+    include: [
+      { model: Evaluation, where: { id: userEvaluationsId }, attributes: [] }
+    ]
+  };
+
+  const params = role === CONFIG.ROLES.ADMIN.SLUG ? {} : professorParams;
+
+  const answer = await Answer.findByPk(id, { ...params });
 
   if (!answer) throw new UserInputError('Answer not found');
 
@@ -151,7 +158,7 @@ export const updateAnswer = async (
   const evaluation = await updatedAnswer.getEvaluation();
 
   return {
-    updatedAnswer,
+    ...updatedAnswer,
     evaluation,
     owner
   };
