@@ -158,7 +158,7 @@ export const updateAnswer = async (
   const evaluation = await updatedAnswer.getEvaluation();
 
   return {
-    ...updatedAnswer,
+    ...updatedAnswer.toJSON(),
     evaluation,
     owner
   };
