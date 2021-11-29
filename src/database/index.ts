@@ -15,7 +15,7 @@ if (!NAME || !PASSWORD || !USER || !DIALECT)
 
 const sequelize = new Sequelize(NAME, USER, PASSWORD, {
   dialect: DIALECT as Dialect,
-  logging: true
+  logging: false
 });
 
 /* Initialize the models */
