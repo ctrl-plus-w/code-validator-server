@@ -11,10 +11,10 @@
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.ts'; exit 0",
     "transpile": "tsc",
     "clean": "rimraf dist",
-    "build": "NODE_ENV=production && npm run prettify && npm run clean && npm run transpile",
+    "build": "NODE_ENV=production && npm run prettify && npm run clean && ttsc -P ./tsconfig.json && npx copyfiles \"src/graphql/schemas/*.graphql\" \"dist/src/graphql/schemas\" -f",
     "watch": "tsc --watch",
     "dev": "npm run prettify & npm run transpile & nodemon",
-    "start": "node dist/src/index.js",
+    "start": "NODE_ENV=production && node dist/src/index.js",
     "prettify": "prettier --single-quote --write \"src/**/*.{ts,js,json}\""
   },
   "lint-staged": {
@@ -62,8 +62,13 @@
     "@types/jsonwebtoken": "^8.5.5",
     "@types/node": "^16.11.6",
     "@types/sequelize": "^4.28.10",
+    "@zerollup/ts-transform-paths": "^1.7.18",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "copyfiles": "^2.4.1",
     "dotenv": "^10.0.0",
     "eslint": "^8.2.0",
-    "eslint-config-prettier": "^8.3.0"
+    "eslint-config-prettier": "^8.3.0",
+    "ttypescript": "^1.5.13",
+    "typescript-transform-paths": "^3.3.1"
   }
 }

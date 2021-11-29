@@ -29,7 +29,12 @@
       "@graphql/*": ["graphql/*"],
       "@type/*": ["types/*"],
       "@util/*": ["utils/*"]
-    }
+    },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "test/**/*"]
