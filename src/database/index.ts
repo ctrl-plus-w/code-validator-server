@@ -8,12 +8,11 @@ import User, { initUser } from '@model/User';
 
 import CONFIG from '@/config';
 
-const { NAME, PASSWORD, USER, DIALECT } = CONFIG.DATABASE;
+const { URI, DIALECT } = CONFIG.DATABASE;
 
-if (!NAME || !PASSWORD || !USER || !DIALECT)
-  throw new Error('Missing credentials');
+if (!URI) throw new Error('Missing credentials');
 
-const sequelize = new Sequelize(NAME, USER, PASSWORD, {
+const sequelize = new Sequelize(URI, {
   dialect: DIALECT as Dialect,
   logging: false
 });

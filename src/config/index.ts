@@ -12,10 +12,7 @@ const CONFIG = {
     ENV: process.env.NODE_ENV
   },
   DATABASE: {
-    HOST: process.env.DB_HOST,
-    USER: process.env.DB_USER,
-    NAME: process.env.DB_NAME,
-    PASSWORD: process.env.DB_PASSWORD,
+    URI: process.env.DB_URI,
     DIALECT: process.env.DB_DIALECT
   },
   AUTH: {
