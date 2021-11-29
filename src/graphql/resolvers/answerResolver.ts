@@ -90,10 +90,17 @@ export const answers = async (
 
   const role = context.jwt.role.slug;
 
-  const params = { include: [{ model: User }, { model: Evaluation }] };
-
   if (role === CONFIG.ROLES.ADMIN.SLUG) {
-    const answers = await Answer.findAll(params);
+    const { evaluationId } = args;
+    if (!evaluationId)
+      throw new UserInputError('You must specify the evaluation id');
+
+    const answers = await Answer.findAll({
+      include: [
+        { model: User },
+        { model: Evaluation, where: { id: evaluationId } }
+      ]
+    });
     return answers;
   }
 
@@ -102,14 +109,20 @@ export const answers = async (
     if (!evaluationId)
       throw new UserInputError('You must specify the evaluation id');
 
-    const [evaluation] = await user.getEvaluations({ attributes: ['id'] });
+    const [evaluation] = await user.getEvaluations({
+      where: { id: evaluationId },
+      attributes: ['id']
+    });
+    if (!evaluation) throw new UserInputError('Evaluation not found');
 
     const answers = await evaluation.getAnswers();
     return answers;
   }
 
   if (role === CONFIG.ROLES.STUDENT.SLUG) {
-    const answers = await user.getAnswers();
+    const answers = await user.getAnswers({
+      include: [{ model: Evaluation }]
+    });
     return answers;
   }
 

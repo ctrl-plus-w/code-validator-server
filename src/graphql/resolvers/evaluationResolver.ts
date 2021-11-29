@@ -8,7 +8,8 @@ import User from '@model/User';
 import {
   checkIsAdminOrProfessor,
   checkIsProfessor,
-  checkIsStudent
+  checkIsStudent,
+  isLoggedIn
 } from '@middleware/authentication.middleware';
 
 import { Context } from '@type/graphql';
@@ -63,7 +64,7 @@ export const evaluation = async (
   args: GetEvaluationArgs,
   context: Context
 ) => {
-  await checkIsAdminOrProfessor(context);
+  await isLoggedIn(context);
 
   const user = context.user;
   if (!user) throw new AuthenticationError('You must be logged in');
@@ -74,12 +75,29 @@ export const evaluation = async (
 
   const params = { where: { id }, limit: 1 };
 
-  const [evaluation] =
-    role === CONFIG.ROLES.PROFESSOR.SLUG
-      ? await user.getEvaluations(params)
-      : await Evaluation.findAll(params);
+  if (role === CONFIG.ROLES.STUDENT.SLUG) {
+    const group = await user.getGroup({ attributes: ['id'] });
+    if (!group) throw new UserInputError('You must have a group');
 
-  return evaluation;
+    const [evaluation] = await Evaluation.findAll({
+      ...params,
+      include: [{ model: Group, where: { id: group.id } }]
+    });
+
+    return evaluation;
+  }
+
+  if (role === CONFIG.ROLES.PROFESSOR.SLUG) {
+    const [evaluation] = await user.getEvaluations(params);
+    return evaluation;
+  }
+
+  if (role === CONFIG.ROLES.ADMIN.SLUG) {
+    const [evaluation] = await Evaluation.findAll(params);
+    return evaluation;
+  }
+
+  return null;
 };
 
 export const evaluations = async (
@@ -87,20 +105,76 @@ export const evaluations = async (
   _args: undefined,
   context: Context
 ) => {
-  await checkIsAdminOrProfessor(context);
+  await isLoggedIn(context);
 
   const { user } = context;
   if (!user) throw new AuthenticationError('You must be logged in');
 
   const role = context.jwt.role.slug;
 
-  const where = role === CONFIG.ROLES.PROFESSOR.SLUG ? { id: user.id } : {};
+  if (role === CONFIG.ROLES.STUDENT.SLUG) {
+    const group = await user.getGroup({ attributes: ['id'] });
+    if (!group) throw new UserInputError('You must have a group');
 
-  const evaluations = await Evaluation.findAll({
-    include: [{ model: User, where }, { model: Answer }, { model: Group }]
-  });
+    const evaluations = await Evaluation.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName', 'gender']
+        },
+        {
+          model: Answer,
+          include: [{ model: User, where: { id: user.id } }],
+          required: false
+        },
+        {
+          model: Group,
+          where: { id: group.id }
+        }
+      ]
+    });
 
-  return evaluations;
+    return evaluations;
+  }
+
+  if (role === CONFIG.ROLES.PROFESSOR.SLUG) {
+    const evaluations = await Evaluation.findAll({
+      include: [
+        {
+          model: User,
+          where: { id: user.id }
+        },
+        {
+          model: Answer
+        },
+        {
+          model: Group
+        }
+      ]
+    });
+
+    return evaluations;
+  }
+
+  if (role === CONFIG.ROLES.ADMIN.SLUG) {
+    const evaluations = await Evaluation.findAll({
+      include: [
+        {
+          model: User
+        },
+        {
+          model: Answer
+        },
+        {
+          model: Group
+        }
+      ]
+    });
+
+    return evaluations;
+  }
+
+  return [];
 };
 
 export const createEvaluation = async (
