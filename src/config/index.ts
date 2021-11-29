@@ -1,7 +1,5 @@
 import pkg from '../../package.json';
 
-require('dotenv').config();
-
 const CONFIG = {
   APP: {
     NAME: pkg.name,
