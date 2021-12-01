@@ -1,6 +1,6 @@
 INSERT INTO `role` (`id`, `name`, `slug`, `permission`, `createdAt`, `updatedAt`) VALUES
   (1, 'Administrateur', 'administrateur', 0, NOW(), NOW()),
-  (2, 'Enseignant',     'Enseignant',     1, NOW(), NOW()),
+  (2, 'Enseignant',     'enseignant',     1, NOW(), NOW()),
   (3, 'Étudiant',       'etudiant',       2, NOW(), NOW());
 
 INSERT INTO `group` (`id`, `name`, `slug`, `createdAt`, `updatedAt`) VALUES
